@@ -27,9 +27,6 @@ export async function POST(req: Request) {
     value = await redis.incr(KEY);
   } else if (body.action === "decrement") {
     value = await redis.decr(KEY);
-  } else if (body.action === "reset") {
-    await redis.set(KEY, 0);
-    value = 0;
   } else {
     return NextResponse.json(
       { error: "Invalid action" },

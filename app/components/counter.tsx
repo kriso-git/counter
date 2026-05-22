@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-type Action = "increment" | "decrement" | "reset";
+type Action = "increment" | "decrement";
 
 export default function Counter() {
   const [count, setCount] = useState<number | null>(null);
@@ -51,9 +51,7 @@ export default function Counter() {
     setPending(true);
     setCount((c) => {
       if (c === null) return c;
-      if (action === "increment") return c + 1;
-      if (action === "decrement") return c - 1;
-      return 0;
+      return action === "increment" ? c + 1 : c - 1;
     });
     try {
       const res = await fetch("/api/counter", {
@@ -84,14 +82,6 @@ export default function Counter() {
           aria-label="Decrement"
         >
           −1
-        </button>
-        <button
-          onClick={() => send("reset")}
-          disabled={count === null}
-          className="min-w-20 min-h-16 sm:min-w-24 sm:min-h-16 rounded-2xl bg-neutral-200 px-6 py-4 text-xl font-semibold text-neutral-900 transition active:scale-90 active:bg-neutral-300 disabled:opacity-40 dark:bg-neutral-700 dark:text-white dark:active:bg-neutral-600 select-none touch-manipulation"
-          aria-label="Reset"
-        >
-          Reset
         </button>
         <button
           onClick={() => send("increment")}
