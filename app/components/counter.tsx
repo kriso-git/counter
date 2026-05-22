@@ -14,8 +14,12 @@ export default function Counter() {
 
     async function load() {
       if (inFlightRef.current > 0) return;
+      if (typeof document !== "undefined" && document.hidden) return;
       try {
-        const res = await fetch("/api/counter", { cache: "no-store" });
+        const res = await fetch(`/api/counter?t=${Date.now()}`, {
+          cache: "no-store",
+          headers: { "Cache-Control": "no-cache" },
+        });
         const data = (await res.json()) as { value: number };
         if (!cancelled) setCount(data.value);
       } catch {
@@ -25,9 +29,20 @@ export default function Counter() {
 
     load();
     const id = setInterval(load, 2000);
+
+    const onVisible = () => {
+      if (!document.hidden) load();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("focus", onVisible);
+    window.addEventListener("pageshow", onVisible);
+
     return () => {
       cancelled = true;
       clearInterval(id);
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("focus", onVisible);
+      window.removeEventListener("pageshow", onVisible);
     };
   }, []);
 
