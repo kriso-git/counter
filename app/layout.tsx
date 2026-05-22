@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Counter",
-  description: "Simple counter app",
+  title: "Szeged Fekete Top Counter",
+  description: "Szeged Fekete Top Counter",
 };
 
 export const viewport: Viewport = {
